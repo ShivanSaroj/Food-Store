@@ -1,6 +1,6 @@
 Problem Statement- To build a web application that will help restaurant and small size shops to manage their menus and the item they have ans hence help users to access all the available items.
 
-Learning Ojective- Learn how to build a full stack web app with all the functonalities and database management.
+Learning Objective- Learn how to build a full stack web app with all the functonalities and database management.
 
 Technical Aspect-
 1. Building web app using front end and backend technologies.
