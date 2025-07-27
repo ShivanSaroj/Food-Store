@@ -80,7 +80,7 @@ export const useCartStore = create((set, get) => ({
                     productId: product._id,
                     name: product.name,
                     price: product.price,
-                    image: product.image
+                    image: product.image,
                 })
             });
 

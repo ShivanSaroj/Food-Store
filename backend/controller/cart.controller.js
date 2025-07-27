@@ -27,7 +27,7 @@ export const getCart = async (req, res) => {
 // Add item to cart
 export const addToCart = async (req, res) => {
     try {
-        const { productId, name, price, image } = req.body;
+        const { productId, name, price, image, userId } = req.body;
 
         if (!productId || !name || !price || !image) {
             return res.status(400).json({
@@ -35,7 +35,7 @@ export const addToCart = async (req, res) => {
                 message: "Missing required fields"
             });
         }
-
+         
         const user = await User.findById(req.userId);
         if (!user) {
             return res.status(404).json({
