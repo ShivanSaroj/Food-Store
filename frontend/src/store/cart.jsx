@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 export const useCartStore = create((set, get) => ({
     cartItems: [],
     isCartOpen: false,
@@ -19,7 +21,7 @@ export const useCartStore = create((set, get) => ({
         console.log("Loading cart from backend...");
         set({ isLoading: true });
         try {
-            const res = await fetch("/api/cart", {
+            const res = await fetch(`${baseUrl}/api/cart`, {
                 credentials: 'include' // Ensure cookies are sent
             });
             const data = await res.json();
@@ -67,7 +69,7 @@ export const useCartStore = create((set, get) => ({
                 cartItems: [...cartItems, { ...product, quantity: 1 }]
             });
 
-            const res = await fetch("/api/cart/add", {
+            const res = await fetch(`${baseUrl}/api/cart/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -112,7 +114,7 @@ export const useCartStore = create((set, get) => ({
     // Remove item from cart
     removeFromCart: async (productId) => {
         try {
-            const res = await fetch(`/api/cart/remove/${productId}`, {
+            const res = await fetch(`${baseUrl}/api/cart/remove/${productId}`, {
                 method: "DELETE"
             });
 
@@ -143,7 +145,7 @@ export const useCartStore = create((set, get) => ({
     // Update item quantity
     updateQuantity: async (productId, quantity) => {
         try {
-            const res = await fetch("/api/cart/update", {
+            const res = await fetch(`${baseUrl}/api/cart/update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -181,7 +183,7 @@ export const useCartStore = create((set, get) => ({
     // Clear cart
     clearCart: async () => {
         try {
-            const res = await fetch("/api/cart/clear", {
+            const res = await fetch(`${baseUrl}/api/cart/clear`, {
                 method: "DELETE"
             });
 
@@ -198,7 +200,7 @@ export const useCartStore = create((set, get) => ({
     // Create order
     createOrder: async (paymentMethod) => {
         try {
-            const res = await fetch("/api/cart/order", {
+            const res = await fetch(`${baseUrl}/api/cart/order`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
