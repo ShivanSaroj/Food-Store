@@ -62,6 +62,7 @@ res.status(500).json({success: false, message: "Server Error"})
 
  export  const deleteProduct=async(req, res) =>{
     const {id} = req.params
+    console.log(id)
     try{
 
         await Product.findByIdAndDelete(id);

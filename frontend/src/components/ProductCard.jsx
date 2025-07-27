@@ -1,25 +1,65 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Heading, HStack, Image,Input, Text, Button, useDisclosure, VStack} from '@chakra-ui/react'
 import { useColorModeValue } from "../components/ui/color-mode"
 import {FaEdit } from "react-icons/fa";
 import {MdDelete } from "react-icons/md"
+import { FaShoppingCart } from "react-icons/fa";
 import { useProductStore } from '../store/product.jsx';
+import { useAuthStore } from '../store/auth.jsx';
+import { useCartStore } from '../store/cart.jsx';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { FaHeart } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
 
 
 const ProductCard = ({product}) => {
-
-    const [isLike, setLike ]=useState(false);
 
 const [updatedProduct, setUpdateProduct]=useState(product)
     const textColor=useColorModeValue("gray.600", "gray.200");
     const bg= useColorModeValue("white", "gray.800");
     //console.log(product.name)
 
+
+    const {deleteProduct, updateProduct}=useProductStore();
+    const { isAdmin, isAuthenticated } = useAuthStore();
+    const { addToCart, cartItems, loadCart, isLoading, isCartLoaded } = useCartStore();
+    const navigate = useNavigate();
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+    // Check if this product is already in cart
+    const isInCart = cartItems.some(item => item._id === product._id);
+
+    // Load cart when component mounts and user is authenticated
+    useEffect(() => {
+        if (isAuthenticated && !isCartLoaded && cartItems.length === 0) {
+            console.log(`ProductCard: Loading cart for authenticated user (not loaded yet)`);
+            loadCart();
+        }
+    }, [isAuthenticated, loadCart, cartItems.length, isCartLoaded]);
+
     
-    const {deleteProduct, updateProduct}=useProductStore()
+    // Handle add to cart with authentication check
+    const handleAddToCart = async () => {
+        if (!isAuthenticated) {
+            // Redirect to login if not authenticated
+            navigate('/login');
+            return;
+        }
+
+        // Don't allow adding if already in cart
+        if (isInCart) {
+            console.log("Item already in cart, ignoring click");
+            return;
+        }
+
+        console.log(`Adding ${product.name} to cart...`);
+        setIsAddingToCart(true);
+        try {
+            await addToCart(product);
+            console.log("Add to cart completed for:", product.name);
+        } finally {
+            setIsAddingToCart(false);
+        }
+    };
     const handleDeleteProduct = async(pid)=>{
        const {success, message} =await deleteProduct(pid)
        if(!success){
@@ -65,20 +105,37 @@ else{
 {product.name}
     </Heading>
     <Text fontWeight='bold'  fontSize='xl' color={textColor} mb={4}>
- Rs.{product.price}
+ ${product.price}
     </Text>
-    <HStack wordSpacing={2}>
-       
-        <Button onClick={() => setLike(!isLike)} bgColor="white" color="red" fontWeight="bold">
-        {isLike === false ?<FaRegHeart />  : <FaHeart size={20}/>}
-        </Button>
+    <HStack spacing={2}>
+        {/* Only show cart button for non-admin users */}
+        {!isAdmin() && (
+            <Button
+                onClick={handleAddToCart}
+                bgColor={isAuthenticated && isInCart ? "red.400" : "green.400"}
+                color="white"
+                fontWeight="bold"
+                flex="1"
+                leftIcon={<FaShoppingCart />}
+                isDisabled={isAuthenticated && isInCart}
+                isLoading={isAddingToCart || isLoading}
+                loadingText="Adding..."
+                _disabled={{
+                    bgColor: "red.400",
+                    color: "white",
+                    opacity: 1
+                }}
+            >
+                {isAuthenticated && isInCart ? "Added to Cart" : "Add to Cart"}
+            </Button>
+        )}
 
-       
-        <Button bg={"red.400"} onClick={()=>handleDeleteProduct(product._id)}>
-        <MdDelete />
-        </Button>
-        
-      
+        {/* Only show delete button for admin users */}
+        {isAdmin() && (
+            <Button bg={"red.400"} color="white" onClick={()=>handleDeleteProduct(product._id)} flex="1">
+                <MdDelete />
+            </Button>
+        )}
     </HStack>
 
 </Box>
