@@ -14,7 +14,7 @@ const setTokenCookie = (res, token) => {
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: None,
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, 
         path: "/"
     });
@@ -145,7 +145,7 @@ export const logout = async (req, res) => {
         res.clearCookie("token", {
         httpOnly: true,
         secure: true, // EXACT MATCH
-        sameSite:None,
+        sameSite:"none",
         path: "/" // EXACT MATCH
         });
         res.status(200).json({
