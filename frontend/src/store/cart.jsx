@@ -117,7 +117,9 @@ export const useCartStore = create((set, get) => ({
     removeFromCart: async (productId) => {
         try {
             const res = await fetch(`${baseUrl}/api/cart/remove/${productId}`, {
-                method: "DELETE"
+                method: "DELETE",
+                 credentials: 'include',
+                
             });
 
             const data = await res.json();
@@ -149,6 +151,7 @@ export const useCartStore = create((set, get) => ({
         try {
             const res = await fetch(`${baseUrl}/api/cart/update`, {
                 method: "PUT",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -186,7 +189,8 @@ export const useCartStore = create((set, get) => ({
     clearCart: async () => {
         try {
             const res = await fetch(`${baseUrl}/api/cart/clear`, {
-                method: "DELETE"
+                method: "DELETE",
+                 credentials: 'include',
             });
 
             const data = await res.json();
@@ -204,6 +208,7 @@ export const useCartStore = create((set, get) => ({
         try {
             const res = await fetch(`${baseUrl}/api/cart/order`, {
                 method: "POST",
+                 credentials: 'include',
                 headers: {
                     "Content-Type": "application/json"
                 },
