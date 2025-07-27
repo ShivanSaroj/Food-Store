@@ -28,7 +28,7 @@ app.use("/api/products",productRoutes );
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/payment", paymentRoutes);
-app.listen(process.env.PORT || 5000, ()=>{
+app.listen(process.env.PORT || 5000, '0.0.0.0', ()=>{
 
     connectDB()
     console.log("server started at http://localhost:5000");
