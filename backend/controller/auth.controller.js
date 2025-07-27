@@ -10,12 +10,11 @@ const generateToken = (userId) => {
 
 // Set JWT Cookie
 const setTokenCookie = (res, token) => {
-    const isProduction = process.env.NODE_ENV === "production";
-    
+   
     res.cookie("token", token, {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "strict" : "lax",
+        secure: true,
+        sameSite: None,
         maxAge: 7 * 24 * 60 * 60 * 1000, 
         path: "/"
     });
@@ -145,8 +144,8 @@ export const logout = async (req, res) => {
     try {
         res.clearCookie("token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // EXACT MATCH
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        secure: true, // EXACT MATCH
+        sameSite:None,
         path: "/" // EXACT MATCH
         });
         res.status(200).json({
