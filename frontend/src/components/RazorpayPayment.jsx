@@ -2,11 +2,12 @@ import React from 'react';
 import { Button } from '@chakra-ui/react';
 import { convertUSDToINR, formatCurrency } from '../utils/currency.js';
 
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000"
 const RazorpayPayment = ({ amount, onSuccess, onFailure, disabled = false, children }) => {
     const handlePayment = async () => {
         try {
             // Create order on backend
-            const orderResponse = await fetch('/api/payment/create-order', {
+            const orderResponse = await fetch(`${baseUrl}/api/payment/create-order`, {
                 method: 'POST',
                  credentials: 'include',
                 headers: {
@@ -35,8 +36,9 @@ const RazorpayPayment = ({ amount, onSuccess, onFailure, disabled = false, child
                 handler: async function (response) {
                     try {
                         // Verify payment on backend
-                        const verifyResponse = await fetch('/api/payment/verify', {
+                        const verifyResponse = await fetch(`${baseUrl}/api/payment/verify`, {
                             method: 'POST',
+                             credentials: 'include',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
