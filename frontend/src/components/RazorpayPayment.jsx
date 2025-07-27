@@ -8,6 +8,7 @@ const RazorpayPayment = ({ amount, onSuccess, onFailure, disabled = false, child
             // Create order on backend
             const orderResponse = await fetch('/api/payment/create-order', {
                 method: 'POST',
+                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
