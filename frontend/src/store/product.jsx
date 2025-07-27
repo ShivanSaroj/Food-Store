@@ -16,6 +16,7 @@ export const useProductStore= create((set) =>(
 
         const res= await fetch(`${baseUrl}/api/products`, {
             method: "POST",
+              credentials: "include",
             headers: {
                 "Content-Type" : "application/json"
 
@@ -34,6 +35,8 @@ export const useProductStore= create((set) =>(
       deleteProduct : async (pid)=>{
         const res= await fetch(`${baseUrl}/api/products/${pid}`,{
           method: "DELETE",
+            credentials: "include",
+
         });
         const data=await res.json();
         if(!data.success) 
