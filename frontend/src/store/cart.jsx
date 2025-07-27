@@ -71,6 +71,8 @@ export const useCartStore = create((set, get) => ({
 
             const res = await fetch(`${baseUrl}/api/cart/add`, {
                 method: "POST",
+                credentials: 'include',
+                
                 headers: {
                     "Content-Type": "application/json"
                 },
