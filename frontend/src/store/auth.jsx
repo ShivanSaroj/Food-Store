@@ -133,7 +133,12 @@ export const useAuthStore = create((set, get) => ({
         set({ isLoading: true });
         
         try {
-            const res = await fetch(`${baseUrl}/api/auth/me`);
+            const res = await fetch(`${baseUrl}/api/auth/me`,
+                            {
+                method: "GET",
+                credentials: "include", // important for sending cookies
+            }
+                        );
             const data = await res.json();
 
             if (data.success) {
