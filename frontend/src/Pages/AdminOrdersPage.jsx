@@ -38,10 +38,10 @@ const AdminOrdersPage = () => {
     const loadAllOrders = async (page = 1) => {
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/cart/admin/orders?page=${page}&limit=10`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/admin/orders?page=${page}&limit=10`, {
                 credentials: 'include'
             });
-            
+
             const data = await res.json();
             console.log(data)
 
